@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clariz Joy Lolong - Portfolio</title>
+    <style>
+        /* Reset + base */
+        * { box-sizing: border-box; }
+        :root{
+            --primary-color: #7c3aed; /* slightly stronger */
+            --secondary-color: #ec4899;
+            --accent-color: #f59e0b;
+            --bg-color: #fff7fb;
+            --card-bg: #ffffff;
+            --text-dark: #111827;
+            --text-light: #6b7280;
+            --nav-bg: rgba(255,255,255,0.8);
+            --max-width: 1100px;
+            --card-radius: 14px;
+            --transition-bounce: cubic-bezier(0.36, 0, 0.66, -0.56);
+            --transition-smooth: cubic-bezier(0.17, 0.55, 0.55, 1);
+        }
+
+        /* Animation classes */
+        .pop-up {
+            opacity: 0;
+            transform: scale(0.8) translateY(30px);
+            transition: transform 0.6s var(--transition-smooth), 
+                      opacity 0.8s ease;
+            will-change: transform, opacity;
+        }
+
+        .pop-up.show {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        .slide-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: transform 0.8s var(--transition-smooth),
+                      opacity 0.6s ease;
+            will-change: transform, opacity;
+        }
+
+        .slide-up.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bounce-in {
+            opacity: 0;
+            animation: none;
+            will-change: transform, opacity;
+        }
+
+        .bounce-in.show {
+            animation: bounceIn 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes bounceIn {
+            0% { 
+                opacity: 0;
+                transform: scale(0.5) translateY(50px);
+            }
+            40% {
+                opacity: 0.7;
+                transform: scale(1.1) translateY(-10px);
+            }
+            65% {
+                opacity: 0.85;
+                transform: scale(0.95) translateY(5px);
+            }
+            85% {
+                opacity: 0.95;
+                transform: scale(1.02) translateY(-2px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 15px 35px rgba(124,58,237,0.2); }
+            50% { box-shadow: 0 20px 45px rgba(124,58,237,0.4); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center;
+            }
+            100% {
+                background-position: 200% center;
+            }
+        }
+
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .glow {
+            animation: glow 4s ease-in-out infinite;
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                var(--primary-color) 0%,
+                var(--secondary-color) 25%,
+                var(--primary-color) 50%,
+                var(--secondary-color) 75%,
+                var(--primary-color) 100%
+            );
+            background-size: 200% auto;
+            animation: shimmer 6s linear infinite;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stagger > * {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: transform 0.7s var(--transition-smooth),
+                      opacity 0.5s ease;
+            will-change: transform, opacity;
+        }
+
+        .stagger.show > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger.show > *:nth-child(1) { transition-delay: 0.15s; }
+        .stagger.show > *:nth-child(2) { transition-delay: 0.3s; }
+        .stagger.show > *:nth-child(3) { transition-delay: 0.45s; }
+        .stagger.show > *:nth-child(4) { transition-delay: 0.6s; }
+        .stagger.show > *:nth-child(5) { transition-delay: 0.75s; }
+
+        html,body{height:100%;}
+        body{
+            margin:0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color:var(--text-dark);
+            background: linear-gradient(180deg, var(--bg-color), #fff);
+            -webkit-font-smoothing:antialiased;
+            -moz-osx-font-smoothing:grayscale;
+        }
+
+        /* layout helpers */
+        .container{max-width:var(--max-width);width:100%;margin:0 auto;padding:0 1.25rem}
+
+        /* NAV */
+        nav{position:sticky;top:0;background:var(--nav-bg);backdrop-filter:blur(6px);box-shadow:0 4px 20px rgba(2,6,23,0.06);z-index:50}
+        nav .container{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1.25rem}
+    .logo{font-weight:700;font-size:1.25rem;background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+        nav ul{display:flex;gap:1.25rem;list-style:none}
+        nav a{display:inline-block;padding:0.35rem 0.2rem;color:var(--text-dark);text-decoration:none;font-weight:600;position:relative}
+        nav a::after{content:'';position:absolute;left:0;bottom:-6px;width:0;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));transition:width .28s}
+        nav a:hover::after{width:100%}
+
+        .hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer}
+        .hamburger span{width:26px;height:3px;background:var(--primary-color);border-radius:3px;display:block}
+
+        /* Sections */
+        section{padding:5.5rem 0}
+        #home{padding-top:4.5rem;background:linear-gradient(180deg,#fff7fb 0%, #fdf2f8 100%)}
+
+        /* Home */
+        .home-content {
+            text-align: center;
+            padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .home-content::before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle at center, 
+                rgba(124,58,237,0.05) 0%, 
+                rgba(236,72,153,0.05) 25%,
+                transparent 60%);
+            top: -25%;
+            left: -25%;
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.6rem;
+            box-shadow: 0 10px 30px rgba(124,58,237,0.15);
+            margin-bottom: 1.5rem;
+            position: relative;
+            border: 4px solid #fff;
+            animation: float 6s ease-in-out infinite, glow 4s ease-in-out infinite;
+        }
+        .profile-image::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            opacity: 0.15;
+            z-index: -1;
+            filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.8rem;
+            margin: 0.5rem 0;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+            padding: 0 15px;
+        }
+        .subtitle::before,
+        .subtitle::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+        }
+        .subtitle::before { left: 0; }
+        .subtitle::after { right: 0; }
+        .intro-text {
+            max-width: 800px;
+            margin: 1.5rem auto;
+            color: var(--text-dark);
+            line-height: 1.8;
+            padding: 2rem;
+            background: rgba(255,255,255,0.8);
+            border-radius: var(--card-radius);
+            box-shadow: 0 8px 32px rgba(124,58,237,0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transform-origin: center;
+        }
+        .intro-text:hover {
+            transform: scale(1.01);
+            box-shadow: 0 12px 40px rgba(124,58,237,0.15);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 8px 18px rgba(124,58,237,0.15);
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(124,58,237,0.25);
+        }
+        .btn:hover::before {
+            opacity: 1;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .btn-outline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+        .btn-outline:hover {
+            color: white;
+            border-color: transparent;
+        }
+        .btn-outline:hover::before {
+            opacity: 1;
+        }
+        .btn + .btn {
+            margin-left: 1rem;
+        }
+
+        /* About */
+        h2{text-align:center;margin-bottom:2rem;font-size:1.9rem}
+        .about-content{display:grid;grid-template-columns:1fr 380px;gap:2rem;align-items:start}
+        .hobbies{padding:1.25rem;background:var(--card-bg);border-radius:var(--card-radius);box-shadow:0 8px 20px rgba(2,6,23,0.06)}
+
+        /* Projects */
+        .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+        .project-card{background:var(--card-bg);border-radius:var(--card-radius);overflow:hidden;box-shadow:0 8px 24px rgba(2,6,23,0.06);transition:transform .25s,box-shadow .25s}
+        .project-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(124,58,237,0.12)}
+        .project-image{height:160px;background:linear-gradient(135deg,var(--primary-color),#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:2.4rem}
+        .project-image img{width:100%;height:100%;object-fit:cover;display:block}
+        .project-content{padding:1rem 1.25rem}
+        .project-content h3{margin:0 0 .5rem;color:var(--primary-color)}
+        .project-content p{color:var(--text-light);margin-bottom:.75rem;font-size:.98rem}
+        .project-link{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:999px;background:linear-gradient(90deg,var(--primary-color),var(--secondary-color));color:#fff;text-decoration:none;font-weight:700}
+
+        /* Contact */
+        .contact-content{padding:2rem 0;text-align:center}
+        .social-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap}
+        .social-link{
+            padding: 1rem;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-dark);
+            background: var(--card-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(124,58,237,0.15);
+            color: var(--primary-color);
+        }
+        .social-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+        .social-link span {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        footer{padding:1.25rem 0;background:var(--text-dark);color:#fff;text-align:center}
+
+        /* Responsive */
+        @media (max-width:1024px){
+            .projects-grid{grid-template-columns:repeat(2,1fr)}
+            .about-content{grid-template-columns:1fr 320px}
+        }
+
+        @media (max-width:768px){
+            .hamburger{display:flex}
+            nav ul{position:fixed;top:64px;right:-110%;height:calc(100% - 64px);width:100%;background:var(--nav-bg);flex-direction:column;padding:2rem;gap:1.25rem;transition:right .25s;overflow:auto}
+            nav ul.active{right:0}
+            nav ul li{margin:0}
+            .about-content{grid-template-columns:1fr}
+            .projects-grid{grid-template-columns:1fr}
+            h1{font-size:1.9rem}
+            .profile-image{width:96px;height:96px;font-size:1.2rem}
+            section{padding:4.5rem 0}
+        }
+
+        @media (max-width:420px){
+            .container{padding:0 .9rem}
+            h1{font-size:1.6rem}
+            .project-image{height:140px}
+            .logo{font-size:1.05rem}
+        }
+
+        /* Scroll Animations */
+        [data-animate] {
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-animate="fade-in"] {
+            transform: translateY(30px);
+        }
+
+        [data-animate="slide-up"] {
+            transform: translateY(60px);
+        }
+
+        [data-animate="slide-down"] {
+            transform: translateY(-60px);
+        }
+
+        [data-animate="slide-left"] {
+            transform: translateX(60px);
+        }
+
+        [data-animate="slide-right"] {
+            transform: translateX(-60px);
+        }
+
+        [data-animate].animate {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        /* Animation Delays */
+        [data-delay="100"] { transition-delay: 0.1s; }
+        [data-delay="200"] { transition-delay: 0.2s; }
+        [data-delay="300"] { transition-delay: 0.3s; }
+        [data-delay="400"] { transition-delay: 0.4s; }
+        [data-delay="500"] { transition-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">Clariz Joy</div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul id="navMenu">
+                <li><a href="#home" onclick="closeMenu()">Home</a></li>
+                <li><a href="#about" onclick="closeMenu()">About</a></li>
+                <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+                <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="container">
+            <div class="home-content">
+                <div class="profile-image pop-up" data-delay="100">
+                    <img src="image/profilepicture.jpg" alt="Clariz Joy Lolong" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                </div>
+                <h1 class="shimmer bounce-in" data-delay="300">Clariz Joy Lolong</h1>
+                <p class="subtitle slide-up" data-delay="500">Aspiring Developer & Lifelong Learner</p>
+                <div style="max-width: 800px; margin: 3rem auto;" class="stagger" data-delay="600">
+                    <p class="intro-text pop-up">
+                        Ever since I was young, I have dreamed of becoming a civil engineer. However, fate led me to a different course one I never imagined taking. At first, I didn't like it, and I struggled because it wasn't something I truly wanted. But despite that, I chose to keep trying.
+                    </p>
+                    <p class="intro-text pop-up">
+                        They say, "Learn to love what you do, even if it's not what you dreamed of," because sometimes comfort and purpose come when you least expect them. I believe that if something is not meant for you, then it's not for you but if it is, no matter what happens, it will always find its way to you.
+                    </p>
+                </div>
+                <div style="margin-top: 2rem;">
+                    <a href="#projects" class="btn">View My Work</a>
+                    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 data-animate="slide-up">About Me</h2>
+            <div class="about-content">
+                <div class="about-text slide-up" data-delay="200">
+                    <p>
+                        I'm Clariz Joy Lolong, a student who enjoys reading stories on Wattpad and playing online games in my free time. I may not be very skilled with computers yet, but I have some basic knowledge of HTML and I'm always eager to learn more.
+                    </p>
+                    <p>
+                        I believe that with patience and dedication, I can continue to grow and improve my skills day by day. Every challenge is an opportunity to learn something new, and I'm excited about the journey ahead.
+                    </p>
+                    <div class="skills stagger">
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">Learning JavaScript</span>
+                        <span class="skill-tag">Problem Solving</span>
+                    </div>
+                </div>
+                <div class="hobbies pop-up" data-delay="400">
+                    <h3>Things I Love</h3>
+                    <ul>
+                        <li>Reading stories on Wattpad</li>
+                        <li>Playing online games</li>
+                        <li>Learning new technologies</li>
+                        <li>Exploring web development</li>
+                        <li>Connecting with friends online</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <h2 data-animate="slide-up">Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card pop-up" data-delay="200">
+                    <div class="project-image">
+                        <img src="image/flappy fish.png" alt="Flappy Fish Game Screenshot" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <h3>Flappy Fish Game</h3>
+                        <p>A fun web-based game inspired by Flappy Bird, made with HTML, CSS, and JavaScript. Navigate your fish through obstacles and see how far you can go!</p>
+                        <a href="https://yumhae.github.io/flappy-fish/" target="_blank" class="project-link">Play Game →</a>
+                    </div>
+                </div>
+                <div class="project-card pop-up" data-delay="400">
+                    <div class="project-image">
+                        <img src="image/periodtracker.png" alt="Period Tracker App Screenshot" loading="lazy">
+                    </div>
+                    <div class="project-content">
+                        <h3>Period Tracker App</h3>
+                        <p>A simple web app that helps track menstrual cycles with a built-in calendar feature. Stay organized and plan ahead with ease.</p>
+                        <a href="https://yumhae.github.io/period-tracker/" target="_blank" class="project-link">View App →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <h2 data-animate="slide-up">Let's Connect!</h2>
+                <p style="font-size: 1.1rem; color: var(--text-light); margin-bottom: 2rem;" data-animate="fade-in" data-delay="200">
+                    I'd love to hear from you! Feel free to reach out through any of my social media platforms or send me an email.
+                </p>
+                <div class="social-links" data-animate="slide-up" data-delay="300">
+                    <a href="https://www.facebook.com/clarizjoy.lolong" target="_blank" class="social-link">
+                        <svg class="social-icon" viewBox="0 0 24 24">
+                            <defs>
+                                <linearGradient id="fb-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#1877F2" />
+                                    <stop offset="100%" style="stop-color:#0D65D9" />
+                                </linearGradient>
+                            </defs>
+                            <path fill="url(#fb-gradient)" d="M24 12c0-6.627-5.373-12-12-12S0 5.373 0 12c0 5.99 4.388 10.954 10.125 11.854V15.47H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12z"/>
+                        </svg>
+                        <span>Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/clarixx_joy/" target="_blank" class="social-link">
+                        <svg class="social-icon" viewBox="0 0 24 24">
+                            <defs>
+                                <radialGradient id="insta-gradient" cx="30%" cy="107%" r="150%">
+                                    <stop offset="0%" style="stop-color:#fdf497"/>
+                                    <stop offset="5%" style="stop-color:#fdf497"/>
+                                    <stop offset="45%" style="stop-color:#fd5949"/>
+                                    <stop offset="60%" style="stop-color:#d6249f"/>
+                                    <stop offset="90%" style="stop-color:#285AEB"/>
+                                </radialGradient>
+                            </defs>
+                            <path fill="url(#insta-gradient)" d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                        </svg>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="mailto:clarizjoylolong@gmail.com" class="social-link">
+                        <svg class="social-icon" viewBox="0 0 24 24">
+                            <defs>
+                                <linearGradient id="email-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#EA4335"/>
+                                    <stop offset="100%" style="stop-color:#DC2626"/>
+                                </linearGradient>
+                            </defs>
+                            <path fill="url(#email-gradient)" d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+                        </svg>
+                        <span>Email Me</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 Clariz Joy Lolong. Made with 💖 using HTML & CSS</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        function closeMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.remove('active');
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation Configuration
+        const animConfig = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2
+        };
+
+        function animateElement(element, show = true) {
+            if (!element) return;
+            
+            const delay = element.dataset.delay || 0;
+            
+            if (show) {
+                // Check if element is already animated to prevent restart
+                if (!element.classList.contains('show')) {
+                    setTimeout(() => {
+                        element.classList.add('show', 'animate');
+                        
+                        // Add click handler if not already added
+                        if (!element.hasAnimationListener) {
+                            element.hasAnimationListener = true;
+                            element.addEventListener('click', () => {
+                                if (!element.classList.contains('show')) {
+                                    animateElement(element, true);
+                                }
+                            });
+                        }
+                    }, delay);
+                }
+            } else {
+                element.classList.remove('show', 'animate');
+                // Reset animation by briefly removing and re-adding the element
+                element.style.animation = 'none';
+                element.offsetHeight; // Trigger reflow
+                element.style.animation = null;
+            }
+        }
+
+        function handleIntersection(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Element is entering the viewport
+                    animateElement(entry.target, true);
+                } else {
+                    // Element is leaving the viewport
+                    // Only reset if it's significantly out of view
+                    if (entry.intersectionRatio < 0.2) {
+                        animateElement(entry.target, false);
+                    }
+                }
+            });
+        }
+
+        // Configure observers for animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.2
+        };
+
+        // Create observers
+        const mainObserver = new IntersectionObserver(handleIntersection, observerOptions);
+        const popupObserver = new IntersectionObserver(handleIntersection, {
+            ...observerOptions,
+            threshold: 0.3
+        });
+
+        // Observe elements
+        document.querySelectorAll('[data-animate]').forEach(element => {
+            mainObserver.observe(element);
+        });
+
+        document.querySelectorAll('.pop-up, .slide-up, .bounce-in, .stagger').forEach(element => {
+            popupObserver.observe(element);
+        });
+
+        // Handle elements that are already in view on load
+        function handleInitialAnimation() {
+            const elements = document.querySelectorAll('[data-animate], .pop-up, .slide-up, .bounce-in, .stagger');
+            elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                if (rect.top <= window.innerHeight && rect.bottom >= 0) {
+                    animateElement(element, true);
+                }
+            });
+        }
+
+        // Run on page load
+        window.addEventListener('load', handleInitialAnimation);
+
+        // Optional: Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
